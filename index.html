@@ -117,6 +117,22 @@
       pointer-events: none
     }
 
+    /* negative-gussa wash. a translucent overlay, NOT a filter on
+       <body> - that would re-anchor every fixed layer and go black. */
+    #coldveil {
+      position: fixed;
+      inset: 0;
+      z-index: 890;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .35s linear;
+      background:
+        radial-gradient(1200px 800px at 50% 30%, rgba(60, 96, 170, .30), transparent 75%),
+        linear-gradient(rgba(14, 22, 44, .48), rgba(6, 10, 22, .62));
+      backdrop-filter: saturate(.35) brightness(.92);
+      -webkit-backdrop-filter: saturate(.35) brightness(.92);
+    }
+
     /* ===================== PRELOADER ===================== */
     #pre {
       position: fixed;
@@ -1608,6 +1624,33 @@
       animation-duration: 2.6s
     }
 
+    /* job done - it clears out so the letter has the stage */
+    .owlpost-opened .owl {
+      animation: leave 1.9s cubic-bezier(.5, 0, .75, .3) forwards;
+    }
+
+    .owlpost-opened .owl .wing,
+    .owlpost-opened .owl .wing.r {
+      animation-duration: .22s
+    }
+
+    @keyframes leave {
+      0% {
+        transform: translate(-50%, -6px) rotate(0) scale(1);
+        opacity: 1
+      }
+
+      25% {
+        transform: translate(-50%, -60px) rotate(6deg) scale(1.04);
+        opacity: 1
+      }
+
+      100% {
+        transform: translate(90vw, -60vh) rotate(18deg) scale(.4);
+        opacity: 0
+      }
+    }
+
     .owl .blink {
       animation: owlblink 4.4s infinite
     }
@@ -1635,7 +1678,9 @@
       transform: translateX(-50%);
       cursor: none;
       opacity: 0;
-      z-index: 5;
+      z-index: 7;
+      /* must sit ABOVE the owl (6) - the envelope makes its own
+         stacking context, so the paper's z-index only counts inside it */
     }
 
     .owlpost-landed .envelope {
@@ -1904,6 +1949,9 @@
     <div class="t" id="preTxt">&nbsp;</div>
     <div class="bar"><i id="preBar"></i></div>
   </div>
+
+  <!-- cold wash that fades in when the gussa meter goes negative -->
+  <div id="coldveil"></div>
 
   <canvas id="trail"></canvas>
   <div id="cursor"></div>
@@ -2513,6 +2561,7 @@
         if (env.classList.contains('open')) return;
         if (!document.getElementById('owlpost').classList.contains('owlpost-landed')) return;
         env.classList.add('open');
+        sec.classList.add('owlpost-opened');                     // owl flies off
         for (let i = 0; i < 30; i++) setTimeout(kiss, i * 45);   // opening burst
         timer = setInterval(kiss, 190);                          // then forever
       });
@@ -2829,6 +2878,7 @@
       const gsub = document.getElementById('gsub');
       const gclose = document.getElementById('gclose');
       const note = document.getElementById('negNote');
+      const veil = document.getElementById('coldveil');
 
       let blocks = 0;          // how many times she's been stopped
       let unlocked = false;    // once true, negative is allowed
@@ -2903,14 +2953,15 @@
           face.textContent = negStates[i][0];
           desc.textContent = negStates[i][1];
           face.style.color = '#6f8fd6';
-          document.body.style.filter =
-            `saturate(${1 + v / 90}) brightness(${1 + v / 260})`;
+          // cold overlay instead of filtering <body> - filtering body
+          // re-anchors every position:fixed layer and blacks the page out
+          veil.style.opacity = Math.min(1, -v / 60).toFixed(3);
         } else {
           const idx = Math.min(4, Math.floor(v / 20.01));
           face.textContent = states[idx][0];
           desc.textContent = states[idx][1];
           face.style.color = '';
-          document.body.style.filter = '';
+          veil.style.opacity = 0;
         }
 
         /* recolor the 3D scene as the mood warms up */
