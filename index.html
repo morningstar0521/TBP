@@ -91,17 +91,38 @@
     }
 
     /* ===================== CURSOR ===================== */
+    /* must outrank the lock screen (10002) and preloader (10001),
+       otherwise it gets painted behind them and she can't see
+       where her mouse is */
     #cursor {
       position: fixed;
       width: 14px;
       height: 14px;
       border-radius: 50%;
       background: var(--accent);
-      z-index: 10000;
+      z-index: 10010;
       pointer-events: none;
       mix-blend-mode: difference;
       transform: translate(-50%, -50%);
       transition: width .2s, height .2s, background .4s;
+    }
+
+    /* while the lock is up, make it unmissable - a solid white dot
+       with a crimson halo, no blend mode to wash it out */
+    #lock:not(.gone)~#cursor {
+      mix-blend-mode: normal;
+      background: #fff;
+      width: 16px;
+      height: 16px;
+      box-shadow:
+        0 0 0 2px rgba(224, 30, 80, .95),
+        0 0 26px rgba(224, 30, 80, .9);
+    }
+
+    #lock:not(.gone)~#cursor.big {
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, .9);
     }
 
     #cursor.big {
@@ -110,10 +131,11 @@
       background: var(--rose)
     }
 
+    /* above the lock too, so the trail reads while she's chasing */
     #trail {
       position: fixed;
       inset: 0;
-      z-index: 9996;
+      z-index: 10003;
       pointer-events: none
     }
 
@@ -2557,11 +2579,12 @@
       color: var(--muted)
     }
 
+    /* above the lock (10002) so the YES celebration is actually seen */
     .hearts {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 9995;
+      z-index: 10005;
       overflow: hidden
     }
 
