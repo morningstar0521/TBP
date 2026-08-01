@@ -685,6 +685,157 @@
       margin: 44px auto 0
     }
 
+    .gscale .neg {
+      color: rgba(120, 160, 255, .6)
+    }
+
+    .negnote {
+      margin-top: 26px;
+      font-size: 10.5px;
+      line-height: 2;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(120, 160, 255, .55);
+      border-top: 1px dashed rgba(120, 160, 255, .22);
+      padding-top: 18px;
+    }
+
+    /* the slider shivers when it refuses to move */
+    input[type=range].refuse {
+      animation: shiver .4s
+    }
+
+    @keyframes shiver {
+
+      0%,
+      100% {
+        transform: translateX(0)
+      }
+
+      20% {
+        transform: translateX(-7px)
+      }
+
+      40% {
+        transform: translateX(6px)
+      }
+
+      60% {
+        transform: translateX(-4px)
+      }
+
+      80% {
+        transform: translateX(3px)
+      }
+    }
+
+    /* ---- the interruption card ---- */
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9994;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(4, 4, 8, .88);
+      backdrop-filter: blur(9px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .4s, visibility .4s;
+    }
+
+    .gate.on {
+      opacity: 1;
+      visibility: visible
+    }
+
+    .gatecard {
+      position: relative;
+      width: min(560px, 100%);
+      background: linear-gradient(170deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .015));
+      border: 1px solid var(--line);
+      border-top: 2px solid var(--crimson);
+      padding: 30px 28px 32px;
+      text-align: center;
+      box-shadow: 0 50px 110px rgba(0, 0, 0, .85);
+      transform: translateY(22px) scale(.97);
+      transition: transform .45s cubic-bezier(.2, .7, .2, 1);
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    .gate.on .gatecard {
+      transform: none
+    }
+
+    .gclose {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: none;
+      border: 0;
+      color: var(--muted);
+      font-size: 26px;
+      line-height: 1;
+      cursor: none;
+      transition: color .3s;
+    }
+
+    .gclose:hover {
+      color: var(--crimson)
+    }
+
+    .gmedia {
+      margin-bottom: 22px
+    }
+
+    .gmedia img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      display: block;
+      border: 1px solid var(--line);
+      background: #08070c;
+    }
+
+    .gmedia .vid {
+      aspect-ratio: 16/9;
+      border: 1px solid var(--line);
+      background: #000;
+    }
+
+    .gmedia iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block
+    }
+
+    .gmedia .empty {
+      padding: 40px 20px;
+      border: 1px dashed rgba(224, 30, 80, .4);
+      font-size: 9.5px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .3);
+    }
+
+    .gtext {
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(22px, 5vw, 40px);
+      line-height: 1.02;
+      color: var(--crimson);
+    }
+
+    .gsub {
+      margin-top: 14px;
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
     .gaugeface {
       font-family: 'Anton', sans-serif;
       font-size: clamp(30px, 7vw, 72px);
@@ -1295,6 +1446,251 @@
       color: var(--muted);
     }
 
+    /* ===================== HOGWARTS LETTER ===================== */
+    #owlpost {
+      background:
+        radial-gradient(900px 700px at 50% 30%, rgba(123, 44, 191, .17), transparent 70%),
+        linear-gradient(#05050a, #0b0810);
+      border-top: 1px solid var(--line);
+      text-align: center;
+      overflow: hidden;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+    }
+
+    /* the swarm of letters flying in from the dark */
+    .swarm {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .swarm i {
+      position: absolute;
+      width: 34px;
+      height: 24px;
+      background: linear-gradient(160deg, #efe7d4, #cfc3a6);
+      border: 1px solid rgba(0, 0, 0, .35);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .6);
+      opacity: 0;
+      animation: fly linear infinite;
+    }
+
+    .swarm i::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-top: 12px solid rgba(0, 0, 0, .09);
+      border-left: 17px solid transparent;
+      border-right: 17px solid transparent;
+    }
+
+    @keyframes fly {
+      0% {
+        opacity: 0;
+        transform: translate(-14vw, 18vh) rotate(-14deg) scale(.5)
+      }
+
+      12% {
+        opacity: .85
+      }
+
+      88% {
+        opacity: .5
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(112vw, -34vh) rotate(24deg) scale(1.05)
+      }
+    }
+
+    #owlpost .wrap {
+      position: relative;
+      z-index: 3
+    }
+
+    /* the envelope she clicks */
+    .envelope {
+      width: min(340px, 78vw);
+      aspect-ratio: 3/2;
+      margin: 44px auto 0;
+      position: relative;
+      cursor: none;
+      transform-style: preserve-3d;
+      animation: hover 4s ease-in-out infinite;
+      transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    @keyframes hover {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-1.5deg)
+      }
+
+      50% {
+        transform: translateY(-14px) rotate(1.5deg)
+      }
+    }
+
+    .envelope .body {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #f3ecda, #d8cbaa);
+      border: 1px solid rgba(0, 0, 0, .3);
+      box-shadow: 0 34px 70px rgba(0, 0, 0, .8), 0 0 60px rgba(224, 30, 80, .22);
+    }
+
+    .envelope .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 62%;
+      background: linear-gradient(#e8dfc6, #cabf9e);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform .8s cubic-bezier(.6, -0.3, .3, 1.3);
+      z-index: 4;
+      border-bottom: 1px solid rgba(0, 0, 0, .12);
+    }
+
+    .envelope.open .flap {
+      transform: rotateX(178deg)
+    }
+
+    .envelope .seal {
+      position: absolute;
+      top: 46%;
+      left: 50%;
+      width: 56px;
+      height: 56px;
+      margin: -28px 0 0 -28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ff4d7d, #9c0f30);
+      display: grid;
+      place-items: center;
+      font-family: 'Anton', sans-serif;
+      font-size: 20px;
+      color: rgba(255, 255, 255, .85);
+      z-index: 6;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .6);
+      transition: opacity .4s, transform .5s;
+    }
+
+    .envelope.open .seal {
+      opacity: 0;
+      transform: scale(.4) rotate(40deg)
+    }
+
+    .envelope .paper {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      bottom: 8%;
+      padding: 20px 16px;
+      background: linear-gradient(#fbf6e9, #ece2c9);
+      color: #2a2028;
+      z-index: 2;
+      transform: translateY(0) scale(.9);
+      opacity: 0;
+      transition: transform .9s cubic-bezier(.2, .7, .2, 1) .25s, opacity .5s .25s;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .6);
+    }
+
+    .envelope.open .paper {
+      opacity: 1;
+      transform: translateY(-118%) scale(1);
+    }
+
+    .envelope .paper .l1 {
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(17px, 4vw, 26px);
+      line-height: 1.06;
+      color: #9c0f30;
+    }
+
+    .envelope .paper .l2 {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(17px, 3.4vw, 22px);
+      margin-top: 10px;
+      color: #4a3b47;
+    }
+
+    .envelope .hint {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -34px;
+      font-size: 9.5px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 7;
+      animation: blink 2.2s infinite;
+    }
+
+    .envelope.open .hint {
+      display: none
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: .35
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    /* kisses + hearts pouring out, forever */
+    .spray {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      overflow: visible;
+    }
+
+    .spray b {
+      position: absolute;
+      left: 50%;
+      top: 46%;
+      font-size: 22px;
+      color: var(--rose);
+      animation: burst 3.4s ease-out forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes burst {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.3)
+      }
+
+      12% {
+        opacity: 1
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(var(--sc)) rotate(var(--rot))
+      }
+    }
+
+    .envelope.open {
+      animation: none;
+      transform: translateY(-10px)
+    }
+
     /* ===================== FOOTER ===================== */
     footer {
       padding: 90px clamp(20px, 6vw, 90px) 60px;
@@ -1400,6 +1796,7 @@
       <a href="#story">history</a>
       <a href="#letter">letter</a>
       <a href="#onesong">side b</a>
+      <a href="#owlpost">owl post</a>
     </div>
   </nav>
 
@@ -1493,10 +1890,24 @@
         <p class="mono-sm" id="gdesc" style="margin-top:14px">
           classic. arms folded. not looking at me. we've been here before.
         </p>
-        <input type="range" id="grange" min="0" max="100" value="0">
+        <input type="range" id="grange" min="-60" max="100" value="0">
         <div class="gscale">
-          <span>gussa</span><span>thoda kam</span><span>hass diya</span>
+          <span class="neg">← aur gussa</span><span>gussa</span><span>thoda kam</span><span>hass diya</span>
         </div>
+        <p class="negnote" id="negNote">
+          as per your request, the meter now goes into the negative.
+          you are allowed to drag it back. allegedly.
+        </p>
+      </div>
+    </div>
+
+    <!-- the interruptions that happen when she tries to go negative -->
+    <div class="gate" id="gate">
+      <div class="gatecard">
+        <button class="gclose" id="gclose" aria-label="close">×</button>
+        <div class="gmedia" id="gmedia"></div>
+        <div class="gtext" id="gtext"></div>
+        <div class="gsub" id="gsub"></div>
       </div>
     </div>
   </section>
@@ -1691,6 +2102,33 @@
     </div>
   </section>
 
+  <!-- ============ HOGWARTS LETTER ============ -->
+  <section id="owlpost">
+    <div class="swarm" id="swarm"></div>
+
+    <div class="wrap">
+      <div class="kicker reveal">owl post · one delivery</div>
+      <h2 class="huge reveal" style="font-size:clamp(28px,6vw,68px);margin-top:14px">
+        SOMETHING<br>ARRIVED<br><span style="color:var(--crimson)">FOR YOU</span>
+      </h2>
+      <p class="mono-sm reveal" style="max-width:400px;margin:20px auto 0">
+        it's been circling the house since morning. it refuses to leave until you open it.
+      </p>
+
+      <div class="envelope reveal" id="envelope">
+        <div class="spray" id="spray"></div>
+        <div class="paper">
+          <div class="l1">I LOVE YOU TITA<br>SO MUCH</div>
+          <div class="l2">— and now you can't un-read it</div>
+        </div>
+        <div class="body"></div>
+        <div class="flap"></div>
+        <div class="seal">T</div>
+        <div class="hint">click to open</div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ FOOTER ============ -->
   <footer>
     <div class="big reveal">HASS KAR DEKHAO</div>
@@ -1743,6 +2181,21 @@
         link: "https://www.youtube.com/watch?v=90qE26nETds"
       }
     ];
+
+    /* =========================================================
+       GUSSA METER MEDIA  <<<<<< PASTE YOUR GIF LINKS HERE >>>>>>
+       ---------------------------------------------------------
+       These show up when she tries to drag the meter backwards.
+       Use a DIRECT image link ending in .gif (right-click a
+       Tenor/Giphy gif -> "Copy image address").
+       You can also just drop files in the photos folder and
+       write "photos/matkar.gif".
+       ========================================================= */
+    const GIFS = {
+      matKar: "",                    // 1st block  - "mat kar lala"
+      buraSong: "OVhLZkGEkBQ",       // 2nd block  - youtube id, "kya itna bura hu mai maa"
+      batman: ""                     // 3rd block  - batman lonely gif, then it unlocks
+    };
 
     /* =========================================================
        YOUTUBE PLAYER HELPER
@@ -1856,6 +2309,61 @@
         cover.querySelector('span').innerHTML =
           'playback locked · open through serve.command';
       }
+    })();
+
+    /* =========================================================
+       OWL POST — flying letters + the envelope that never
+       stops throwing kisses once it's open
+       ========================================================= */
+    (function () {
+      const swarm = document.getElementById('swarm');
+      const env = document.getElementById('envelope');
+      const spray = document.getElementById('spray');
+      if (!swarm || !env) return;
+
+      // background swarm of letters drifting across
+      for (let i = 0; i < 22; i++) {
+        const f = document.createElement('i');
+        f.style.top = (Math.random() * 100) + '%';
+        f.style.animationDuration = (9 + Math.random() * 16) + 's';
+        f.style.animationDelay = (-Math.random() * 22) + 's';
+        f.style.transform = `scale(${.4 + Math.random() * .9})`;
+        swarm.appendChild(f);
+      }
+
+      const BITS = ['💋', '♥', '♡', '💋', '♥', '✦', '💋', '♥'];
+      let timer = null;
+
+      function kiss() {
+        const b = document.createElement('b');
+        b.textContent = BITS[Math.floor(Math.random() * BITS.length)];
+        const ang = Math.random() * Math.PI * 2;
+        const dist = 130 + Math.random() * 230;
+        b.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+        b.style.setProperty('--dy', (Math.sin(ang) * dist - 90) + 'px');
+        b.style.setProperty('--sc', (0.7 + Math.random() * 1.5).toFixed(2));
+        b.style.setProperty('--rot', (Math.random() * 300 - 150) + 'deg');
+        b.style.fontSize = (14 + Math.random() * 22) + 'px';
+        b.style.animationDuration = (2.4 + Math.random() * 2) + 's';
+        spray.appendChild(b);
+        setTimeout(() => b.remove(), 4600);
+      }
+
+      env.addEventListener('click', () => {
+        if (env.classList.contains('open')) return;
+        env.classList.add('open');
+        for (let i = 0; i < 30; i++) setTimeout(kiss, i * 45);   // opening burst
+        timer = setInterval(kiss, 190);                          // then forever
+      });
+
+      // pause the spray while the section is off screen (saves the battery)
+      new IntersectionObserver(es => {
+        es.forEach(e => {
+          if (!env.classList.contains('open')) return;
+          if (e.isIntersecting && !timer) timer = setInterval(kiss, 190);
+          else if (!e.isIntersecting && timer) { clearInterval(timer); timer = null; }
+        });
+      }, { threshold: .05 }).observe(document.getElementById('owlpost'));
     })();
 
     /* =========================================================
@@ -2123,6 +2631,13 @@
         ["HASS DIYA", "there it is. that's the whole point of this website. told you."]
       ];
 
+      /* states below zero, once she's finally allowed through */
+      const negStates = [
+        ["AUR ZYADA GUSSA", "fine. go ahead. i'll be here."],
+        ["BOHOT ZYADA GUSSA", "okay this is a lot of gussa for one website."],
+        ["MAXIMUM GUSSA", "batman levels. cape, rain, whole thing."]
+      ];
+
       function pop() {
         for (let i = 0; i < 26; i++) {
           const b = document.createElement('b');
@@ -2136,16 +2651,104 @@
         }
       }
 
+      /* ---------- the "you can't go back" sequence ----------
+         she's told she CAN go negative. she can't. three times.
+         then she can. GIF links live in the GIFS object above. */
+      const gate = document.getElementById('gate');
+      const gmedia = document.getElementById('gmedia');
+      const gtext = document.getElementById('gtext');
+      const gsub = document.getElementById('gsub');
+      const gclose = document.getElementById('gclose');
+      const note = document.getElementById('negNote');
+
+      let blocks = 0;          // how many times she's been stopped
+      let unlocked = false;    // once true, negative is allowed
+
+      function slot(src, alt) {
+        if (!src) return `<div class="empty">gif slot — paste a link into GIFS.${alt} at the top of the script</div>`;
+        return `<img src="${src}" alt="${alt}">`;
+      }
+
+      const BLOCKS = [
+        () => ({
+          media: slot(GIFS.matKar, 'matKar'),
+          text: 'MAT KAR LALA',
+          sub: 'nope. that direction is closed. try the other way.'
+        }),
+        () => ({
+          media: GIFS.buraSong
+            ? `<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${GIFS.buraSong}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`
+            : slot('', 'buraSong'),
+          text: 'KYA ITNA BURA HU MAI MAA',
+          sub: 'you\'re really going to sit there and drag it further back. in front of everyone.'
+        }),
+        () => ({
+          media: slot(GIFS.batman, 'batman'),
+          text: 'FINE. GO.',
+          sub: 'unlocked. the meter goes negative now. hope you\'re happy. i\'ll be on a roof somewhere.'
+        })
+      ];
+
+      function openGate(i) {
+        const d = BLOCKS[i]();
+        gmedia.innerHTML = d.media;
+        gtext.textContent = d.text;
+        gsub.textContent = d.sub;
+        gate.classList.add('on');
+      }
+
+      function closeGate() {
+        gate.classList.remove('on');
+        gmedia.innerHTML = '';   // kills any playing video
+      }
+
+      gclose.addEventListener('click', closeGate);
+      gate.addEventListener('click', e => { if (e.target === gate) closeGate(); });
+      addEventListener('keydown', e => { if (e.key === 'Escape') closeGate(); });
+
+      function refuse() {
+        r.value = 0;
+        r.classList.remove('refuse');
+        void r.offsetWidth;              // restart the shiver
+        r.classList.add('refuse');
+        openGate(Math.min(blocks, BLOCKS.length - 1));
+        blocks++;
+        if (blocks >= BLOCKS.length) {
+          unlocked = true;
+          note.textContent = 'negative unlocked. it was always going to end like this.';
+          note.style.color = 'rgba(120,160,255,.8)';
+        }
+      }
+
       function render() {
-        const v = +r.value, m = v / 100;
+        let v = +r.value;
+
+        // she tried to go back before earning it
+        if (v < 0 && !unlocked) { refuse(); v = 0; }
+
+        const m = Math.max(0, v) / 100;
         document.documentElement.style.setProperty('--mood', m);
-        const idx = Math.min(4, Math.floor(v / 20.01));
-        face.textContent = states[idx][0];
-        desc.textContent = states[idx][1];
+
+        if (v < 0) {
+          const i = Math.min(negStates.length - 1, Math.floor(-v / 20));
+          face.textContent = negStates[i][0];
+          desc.textContent = negStates[i][1];
+          face.style.color = '#6f8fd6';
+          document.body.style.filter =
+            `saturate(${1 + v / 90}) brightness(${1 + v / 260})`;
+        } else {
+          const idx = Math.min(4, Math.floor(v / 20.01));
+          face.textContent = states[idx][0];
+          desc.textContent = states[idx][1];
+          face.style.color = '';
+          document.body.style.filter = '';
+        }
 
         /* recolor the 3D scene as the mood warms up */
         if (window.THREE && HERO_MAT.length) {
-          const c = new THREE.Color(0xe01e50).lerp(new THREE.Color(0xff9a3c), m);
+          const c = v < 0
+            ? new THREE.Color(0xe01e50).lerp(new THREE.Color(0x3d5a99), Math.min(1, -v / 60))
+            : new THREE.Color(0xe01e50).lerp(new THREE.Color(0xff9a3c), m);
           HERO_MAT.forEach((mat, i) => { if (i % 3 !== 0) mat.color.copy(c); });
         }
 
