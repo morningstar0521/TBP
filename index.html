@@ -133,6 +133,190 @@
       -webkit-backdrop-filter: saturate(.35) brightness(.92);
     }
 
+    /* ===================== LOCK SCREEN ===================== */
+    #lock {
+      position: fixed;
+      inset: 0;
+      z-index: 10002;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      background:
+        radial-gradient(900px 700px at 50% 40%, rgba(224, 30, 80, .2), transparent 70%),
+        radial-gradient(600px 500px at 80% 80%, rgba(123, 44, 191, .18), transparent 70%),
+        #05050a;
+      transition: opacity .8s ease, visibility .8s;
+    }
+
+    #lock.gone {
+      opacity: 0;
+      visibility: hidden
+    }
+
+    .lock-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 620px;
+    }
+
+    .lock-heart {
+      font-size: 44px;
+      color: var(--crimson);
+      animation: lockbeat 1.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 26px rgba(224, 30, 80, .8));
+      margin-bottom: 22px;
+    }
+
+    @keyframes lockbeat {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      14% {
+        transform: scale(1.22)
+      }
+
+      28% {
+        transform: scale(1)
+      }
+
+      42% {
+        transform: scale(1.16)
+      }
+    }
+
+    .lock-q {
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(34px, 9vw, 92px);
+      line-height: .92;
+      letter-spacing: -.015em;
+      margin: 16px 0 0;
+    }
+
+    .lock-sub {
+      margin-top: 18px;
+      font-size: 12px;
+      line-height: 2;
+      letter-spacing: .1em;
+      color: var(--muted);
+      min-height: 3em;
+      transition: color .3s;
+    }
+
+    .lock-actions {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 30px;
+      min-height: 62px;
+    }
+
+    .lock-btn {
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      font-size: 19px;
+      letter-spacing: .16em;
+      padding: 17px 44px;
+      border: 1px solid var(--crimson);
+      background: transparent;
+      color: var(--ink);
+      cursor: none;
+      transition: background .3s, color .3s, box-shadow .3s, transform .25s;
+    }
+
+    .lock-btn.yes {
+      background: var(--crimson);
+      box-shadow: 0 0 34px rgba(224, 30, 80, .5);
+      position: relative;
+      z-index: 4;
+    }
+
+    .lock-btn.yes:hover {
+      transform: scale(1.09);
+      box-shadow: 0 0 60px rgba(224, 30, 80, .95);
+    }
+
+    .lock-btn.no {
+      z-index: 1;
+      border-color: rgba(255, 255, 255, .28);
+      color: var(--muted);
+    }
+
+    /* once it starts running it goes anywhere on screen */
+    .lock-btn.no.loose {
+      position: fixed;
+      margin: 0;
+      transition: left .32s cubic-bezier(.3, 1.4, .5, 1),
+        top .32s cubic-bezier(.3, 1.4, .5, 1),
+        transform .32s cubic-bezier(.3, 1.4, .5, 1),
+        opacity .4s;
+    }
+
+    /* final resting place: tucked behind the yes button */
+    .lock-btn.no.caught {
+      transition: left .7s cubic-bezier(.4, 0, .2, 1),
+        top .7s cubic-bezier(.4, 0, .2, 1),
+        transform .7s cubic-bezier(.4, 0, .2, 1),
+        opacity .7s;
+      pointer-events: none;
+      opacity: .35;
+    }
+
+    .lock-foot {
+      margin-top: 26px;
+      font-family: 'Caveat', cursive;
+      font-size: 21px;
+      color: var(--rose);
+      min-height: 1.4em;
+    }
+
+    /* floating hearts in the background of the lock screen */
+    .lock-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .lock-bg b {
+      position: absolute;
+      color: rgba(224, 30, 80, .22);
+      animation: lockfloat linear infinite;
+    }
+
+    @keyframes lockfloat {
+      0% {
+        transform: translateY(105vh) scale(.5) rotate(0);
+        opacity: 0
+      }
+
+      12% {
+        opacity: 1
+      }
+
+      88% {
+        opacity: 1
+      }
+
+      100% {
+        transform: translateY(-20vh) scale(1.2) rotate(200deg);
+        opacity: 0
+      }
+    }
+
+    @media(max-width:520px) {
+      .lock-btn {
+        font-size: 16px;
+        padding: 15px 32px
+      }
+    }
+
     /* ===================== PRELOADER ===================== */
     #pre {
       position: fixed;
@@ -2433,6 +2617,24 @@
 
 <body>
 
+  <!-- ============ LOCK SCREEN ============ -->
+  <div id="lock">
+    <div class="lock-bg" id="lockBg"></div>
+    <div class="lock-inner">
+      <div class="lock-heart">♥</div>
+      <div class="kicker" style="color:rgba(255,255,255,.4)">access restricted</div>
+      <h1 class="lock-q glitch" data-t="DO YOU LOVE ME?">DO YOU LOVE ME?</h1>
+      <p class="lock-sub" id="lockSub">answer honestly. the site is locked until you do.</p>
+
+      <div class="lock-actions">
+        <button class="lock-btn yes" id="btnYes">YES</button>
+        <button class="lock-btn no" id="btnNo">NO</button>
+      </div>
+
+      <p class="lock-foot" id="lockFoot">&nbsp;</p>
+    </div>
+  </div>
+
   <!-- ============ PRELOADER ============ -->
   <div id="pre">
     <div class="t" id="preTxt">&nbsp;</div>
@@ -3285,6 +3487,125 @@
     })();
 
     /* =========================================================
+       0.5 LOCK SCREEN — "do you love me?"
+       ---------------------------------------------------------
+       NO runs away every time she goes near it, shrinking as it
+       goes, and after enough attempts it gives up and hides
+       behind YES. There was only ever one answer.
+       ========================================================= */
+    (function () {
+      const lock = document.getElementById('lock');
+      const yes = document.getElementById('btnYes');
+      const no = document.getElementById('btnNo');
+      const sub = document.getElementById('lockSub');
+      const foot = document.getElementById('lockFoot');
+      const bg = document.getElementById('lockBg');
+      if (!lock) return;
+
+      document.body.style.overflow = 'hidden';
+
+      // drifting hearts behind everything
+      for (let i = 0; i < 16; i++) {
+        const b = document.createElement('b');
+        b.textContent = i % 3 ? '♥' : '♡';
+        b.style.left = (Math.random() * 100) + 'vw';
+        b.style.fontSize = (12 + Math.random() * 28) + 'px';
+        b.style.animationDuration = (9 + Math.random() * 12) + 's';
+        b.style.animationDelay = (-Math.random() * 18) + 's';
+        bg.appendChild(b);
+      }
+
+      const TAUNTS = [
+        "wrong button.",
+        "try again. carefully this time.",
+        "it moved? weird. must be a bug.",
+        "you're not fast enough.",
+        "this is embarrassing for both of us.",
+        "it's getting smaller. that's not my fault.",
+        "nobody has ever clicked it. nobody ever will.",
+        "one more and it gives up entirely.",
+        "there it goes. hiding. like it should have from the start."
+      ];
+
+      const MAX = 9;
+      let tries = 0;
+
+      function dodge(e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        if (no.classList.contains('caught')) return;
+
+        tries++;
+        const scale = Math.max(0.16, 1 - tries * 0.095);
+
+        // final attempt: crawl behind the yes button and stay there
+        if (tries >= MAX) {
+          const y = yes.getBoundingClientRect();
+          no.classList.remove('loose');
+          no.classList.add('loose', 'caught');
+          no.style.left = (y.left + y.width / 2) + 'px';
+          no.style.top = (y.top + y.height / 2) + 'px';
+          no.style.transform = 'translate(-50%,-50%) scale(.14)';
+          sub.textContent = "the no button has resigned. it's behind the yes now. it lives there.";
+          foot.textContent = "there was only ever one answer.";
+          return;
+        }
+
+        if (!no.classList.contains('loose')) {
+          const r = no.getBoundingClientRect();
+          no.style.width = r.width + 'px';
+          no.style.height = r.height + 'px';
+          no.classList.add('loose');
+        }
+
+        // pick a random spot that stays fully on screen
+        const w = no.offsetWidth * scale, h = no.offsetHeight * scale;
+        const pad = 14;
+        const left = pad + Math.random() * Math.max(1, innerWidth - w - pad * 2);
+        const top = pad + Math.random() * Math.max(1, innerHeight - h - pad * 2);
+
+        no.style.left = left + 'px';
+        no.style.top = top + 'px';
+        no.style.transform = `scale(${scale}) rotate(${(Math.random() * 40 - 20).toFixed(1)}deg)`;
+
+        sub.textContent = TAUNTS[Math.min(tries - 1, TAUNTS.length - 1)];
+        foot.textContent = tries >= 3 ? `dodged ${tries} times` : '';
+      }
+
+      // mouse: runs on approach. touch: runs before the tap lands.
+      no.addEventListener('pointerenter', dodge);
+      no.addEventListener('touchstart', dodge, { passive: false });
+      no.addEventListener('click', dodge);
+
+      yes.addEventListener('click', () => {
+        foot.textContent = "obviously.";
+        // a little celebration before the site opens
+        const layer = document.getElementById('heartLayer');
+        for (let i = 0; i < 34; i++) {
+          const b = document.createElement('b');
+          b.textContent = ['♥', '♡', '💋', '✦'][i % 4];
+          b.style.left = Math.random() * 100 + 'vw';
+          b.style.top = (72 + Math.random() * 24) + 'vh';
+          b.style.animationDelay = (Math.random() * .9) + 's';
+          b.style.fontSize = (14 + Math.random() * 26) + 'px';
+          layer.appendChild(b);
+          setTimeout(() => b.remove(), 6200);
+        }
+        setTimeout(() => {
+          lock.classList.add('gone');
+          document.body.style.overflow = '';
+          if (window.__startPreloader) window.__startPreloader();
+        }, 620);
+      });
+
+      // keep it on screen if she rotates the phone mid-chase
+      addEventListener('resize', () => {
+        if (!no.classList.contains('loose') || no.classList.contains('caught')) return;
+        no.style.left = Math.min(parseFloat(no.style.left) || 0, innerWidth - no.offsetWidth - 14) + 'px';
+        no.style.top = Math.min(parseFloat(no.style.top) || 0, innerHeight - no.offsetHeight - 14) + 'px';
+      });
+    })();
+
+    /* =========================================================
        1. PRELOADER
        ========================================================= */
     (function () {
@@ -3309,7 +3630,8 @@
             setTimeout(() => n.classList.add('in'), i * 140));
         }, 780);
       }
-      setTimeout(type, 300);
+      // held until she gets past the lock screen
+      window.__startPreloader = () => setTimeout(type, 300);
     })();
 
     /* =========================================================
