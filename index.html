@@ -1457,6 +1457,21 @@
       min-height: 100svh;
       display: grid;
       place-items: center;
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+
+    /* the runway the owl flies down and the letter rises into */
+    .dropzone {
+      position: relative;
+      height: 430px;
+      margin-top: 28px;
+    }
+
+    @media(max-width:640px) {
+      .dropzone {
+        height: 380px
+      }
     }
 
     /* the swarm of letters flying in from the dark */
@@ -1512,27 +1527,131 @@
       z-index: 3
     }
 
+    /* ---- the owl that brings it ---- */
+    .owl {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 150px;
+      z-index: 6;
+      transform: translate(-160vw, -40px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .owlpost-go .owl {
+      animation: swoop 3s cubic-bezier(.3, .5, .3, 1) forwards;
+    }
+
+    @keyframes swoop {
+      0% {
+        transform: translate(-160vw, 40px) rotate(-8deg) scale(.55);
+        opacity: 0
+      }
+
+      12% {
+        opacity: 1
+      }
+
+      35% {
+        transform: translate(-46%, -46px) rotate(5deg) scale(.85)
+      }
+
+      62% {
+        transform: translate(-54%, 14px) rotate(-4deg) scale(1)
+      }
+
+      100% {
+        transform: translate(-50%, -6px) rotate(0) scale(1);
+        opacity: 1
+      }
+    }
+
+    .owl .wing,
+    .owl .blink {
+      transform-box: view-box;
+    }
+
+    .owl .wing {
+      transform-origin: 100px 62px;
+      animation: flap .26s ease-in-out infinite alternate;
+    }
+
+    .owl .wing.r {
+      transform-origin: 100px 62px;
+      animation-name: flapR;
+    }
+
+    @keyframes flap {
+      from {
+        transform: rotate(-26deg)
+      }
+
+      to {
+        transform: rotate(24deg)
+      }
+    }
+
+    @keyframes flapR {
+      from {
+        transform: rotate(26deg)
+      }
+
+      to {
+        transform: rotate(-24deg)
+      }
+    }
+
+    /* once delivered the owl just sits there breathing */
+    .owlpost-landed .owl .wing,
+    .owlpost-landed .owl .wing.r {
+      animation-duration: 2.6s
+    }
+
+    .owl .blink {
+      animation: owlblink 4.4s infinite
+    }
+
+    @keyframes owlblink {
+
+      0%,
+      95%,
+      100% {
+        transform: scaleY(1)
+      }
+
+      97% {
+        transform: scaleY(.06)
+      }
+    }
+
     /* the envelope she clicks */
     .envelope {
-      width: min(340px, 78vw);
+      width: min(300px, 74vw);
       aspect-ratio: 3/2;
-      margin: 44px auto 0;
-      position: relative;
+      position: absolute;
+      left: 50%;
+      top: 150px;
+      transform: translateX(-50%);
       cursor: none;
-      transform-style: preserve-3d;
+      opacity: 0;
+      z-index: 5;
+    }
+
+    .owlpost-landed .envelope {
+      opacity: 1;
       animation: hover 4s ease-in-out infinite;
-      transition: transform .6s cubic-bezier(.2, .7, .2, 1);
     }
 
     @keyframes hover {
 
       0%,
       100% {
-        transform: translateY(0) rotate(-1.5deg)
+        transform: translate(-50%, 0) rotate(-1.5deg)
       }
 
       50% {
-        transform: translateY(-14px) rotate(1.5deg)
+        transform: translate(-50%, -12px) rotate(1.5deg)
       }
     }
 
@@ -1586,24 +1705,28 @@
       transform: scale(.4) rotate(40deg)
     }
 
+    /* sits ABOVE the flap (z-index 9) so nothing covers the words,
+       and rises clear of the envelope instead of into the heading */
     .envelope .paper {
       position: absolute;
-      left: 6%;
-      right: 6%;
-      bottom: 8%;
-      padding: 20px 16px;
+      left: 2%;
+      right: 2%;
+      bottom: 10%;
+      padding: 22px 18px;
       background: linear-gradient(#fbf6e9, #ece2c9);
       color: #2a2028;
-      z-index: 2;
-      transform: translateY(0) scale(.9);
+      z-index: 9;
+      transform: translateY(0) scale(.86);
       opacity: 0;
-      transition: transform .9s cubic-bezier(.2, .7, .2, 1) .25s, opacity .5s .25s;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, .6);
+      pointer-events: none;
+      transition: transform .95s cubic-bezier(.2, .7, .2, 1) .3s, opacity .45s .3s;
+      box-shadow: 0 26px 60px rgba(0, 0, 0, .75);
+      border: 1px solid rgba(0, 0, 0, .1);
     }
 
     .envelope.open .paper {
       opacity: 1;
-      transform: translateY(-118%) scale(1);
+      transform: translateY(-112%) scale(1);
     }
 
     .envelope .paper .l1 {
@@ -1686,9 +1809,9 @@
       }
     }
 
-    .envelope.open {
+    .owlpost-landed .envelope.open {
       animation: none;
-      transform: translateY(-10px)
+      transform: translate(-50%, -6px)
     }
 
     /* ===================== FOOTER ===================== */
@@ -2115,16 +2238,53 @@
         it's been circling the house since morning. it refuses to leave until you open it.
       </p>
 
-      <div class="envelope reveal" id="envelope">
-        <div class="spray" id="spray"></div>
-        <div class="paper">
-          <div class="l1">I LOVE YOU TITA<br>SO MUCH</div>
-          <div class="l2">— and now you can't un-read it</div>
+      <div class="dropzone">
+        <!-- the owl -->
+        <svg class="owl" viewBox="0 0 200 150" aria-hidden="true">
+          <!-- back wing -->
+          <path class="wing r" d="M100 62 C132 40 172 44 186 66 C170 84 132 88 100 74 Z"
+            fill="#4a3a5e" stroke="#241c33" stroke-width="2" />
+          <!-- tail -->
+          <path d="M88 104 L100 138 L112 104 Z" fill="#3b2e4d" stroke="#241c33" stroke-width="2" />
+          <!-- body -->
+          <ellipse cx="100" cy="80" rx="34" ry="38" fill="#5b4874" stroke="#241c33" stroke-width="2" />
+          <ellipse cx="100" cy="88" rx="21" ry="26" fill="#7a659a" opacity=".55" />
+          <!-- ear tufts -->
+          <path d="M74 40 L68 16 L88 32 Z" fill="#5b4874" stroke="#241c33" stroke-width="2" />
+          <path d="M126 40 L132 16 L112 32 Z" fill="#5b4874" stroke="#241c33" stroke-width="2" />
+          <!-- head -->
+          <circle cx="100" cy="46" r="31" fill="#6a5588" stroke="#241c33" stroke-width="2" />
+          <!-- eyes -->
+          <g class="blink" style="transform-origin:100px 44px">
+            <circle cx="88" cy="44" r="12" fill="#f4eee2" stroke="#241c33" stroke-width="2" />
+            <circle cx="112" cy="44" r="12" fill="#f4eee2" stroke="#241c33" stroke-width="2" />
+            <circle cx="89" cy="45" r="5.5" fill="#e01e50" />
+            <circle cx="111" cy="45" r="5.5" fill="#e01e50" />
+            <circle cx="90.5" cy="43" r="1.8" fill="#fff" />
+            <circle cx="112.5" cy="43" r="1.8" fill="#fff" />
+          </g>
+          <!-- beak -->
+          <path d="M100 52 L94 60 L106 60 Z" fill="#ff9a3c" stroke="#241c33" stroke-width="1.5" />
+          <!-- feet gripping the letter -->
+          <path d="M90 114 L86 124 M100 116 L100 126 M110 114 L114 124"
+            stroke="#ff9a3c" stroke-width="4" stroke-linecap="round" fill="none" />
+          <!-- front wing -->
+          <path class="wing l" d="M100 62 C68 40 28 44 14 66 C30 84 68 88 100 74 Z"
+            fill="#5b4874" stroke="#241c33" stroke-width="2" />
+        </svg>
+
+        <!-- the letter it drops -->
+        <div class="envelope" id="envelope">
+          <div class="spray" id="spray"></div>
+          <div class="paper">
+            <div class="l1">I LOVE YOU TITA<br>SO MUCH</div>
+            <div class="l2">— and now you can't un-read it</div>
+          </div>
+          <div class="body"></div>
+          <div class="flap"></div>
+          <div class="seal">T</div>
+          <div class="hint">click to open</div>
         </div>
-        <div class="body"></div>
-        <div class="flap"></div>
-        <div class="seal">T</div>
-        <div class="hint">click to open</div>
       </div>
     </div>
   </section>
@@ -2351,19 +2511,28 @@
 
       env.addEventListener('click', () => {
         if (env.classList.contains('open')) return;
+        if (!document.getElementById('owlpost').classList.contains('owlpost-landed')) return;
         env.classList.add('open');
         for (let i = 0; i < 30; i++) setTimeout(kiss, i * 45);   // opening burst
         timer = setInterval(kiss, 190);                          // then forever
       });
 
-      // pause the spray while the section is off screen (saves the battery)
+      // the owl only flies in once she scrolls here, then drops the letter
+      const sec = document.getElementById('owlpost');
+      let delivered = false;
       new IntersectionObserver(es => {
         es.forEach(e => {
+          if (e.isIntersecting && !delivered) {
+            delivered = true;
+            sec.classList.add('owlpost-go');
+            setTimeout(() => sec.classList.add('owlpost-landed'), 2900);
+          }
+          // pause the spray while off screen (saves her battery)
           if (!env.classList.contains('open')) return;
           if (e.isIntersecting && !timer) timer = setInterval(kiss, 190);
           else if (!e.isIntersecting && timer) { clearInterval(timer); timer = null; }
         });
-      }, { threshold: .05 }).observe(document.getElementById('owlpost'));
+      }, { threshold: .12 }).observe(sec);
     })();
 
     /* =========================================================
