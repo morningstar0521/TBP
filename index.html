@@ -749,7 +749,7 @@
     .gate {
       position: fixed;
       inset: 0;
-      z-index: 9994;
+      z-index: 9999;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -829,12 +829,40 @@
     }
 
     .gmedia .empty {
-      padding: 40px 20px;
-      border: 1px dashed rgba(224, 30, 80, .4);
+      padding: 44px 20px;
+      border: 2px dashed rgba(224, 30, 80, .55);
+      background: rgba(224, 30, 80, .07);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .gmedia .empty b {
+      font-family: 'Anton', sans-serif;
+      font-weight: 400;
+      font-size: 19px;
+      letter-spacing: .18em;
+      color: var(--crimson);
+    }
+
+    .gmedia .empty span {
       font-size: 9.5px;
-      letter-spacing: .2em;
+      letter-spacing: .18em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, .3);
+      color: rgba(255, 255, 255, .42);
+      line-height: 1.8;
+    }
+
+    /* nudge so she knows the card is dismissable */
+    .gatecard::after {
+      content: "click anywhere to close";
+      display: block;
+      margin-top: 20px;
+      font-size: 8.5px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .25);
     }
 
     .gtext {
@@ -2882,10 +2910,16 @@
 
       let blocks = 0;          // how many times she's been stopped
       let unlocked = false;    // once true, negative is allowed
+      let gateOpen = false;    // stops one drag eating all three blocks
 
-      function slot(src, alt) {
-        if (!src) return `<div class="empty">gif slot — paste a link into GIFS.${alt} at the top of the script</div>`;
-        return `<img src="${src}" alt="${alt}">`;
+      function missing(key) {
+        return `<div class="empty"><b>GIF SLOT ${key.toUpperCase()}</b>
+                <span>paste a link into GIFS.${key} at the top of the script</span></div>`;
+      }
+
+      function slot(src, key) {
+        if (!src) return missing(key);
+        return `<img src="${src}" alt="" onerror="this.parentNode.innerHTML=${JSON.stringify(missing(key)).replace(/"/g, '&quot;')}">`;
       }
 
       const BLOCKS = [
@@ -2917,8 +2951,10 @@
       }
 
       function closeGate() {
+        if (!gateOpen) return;
         gate.classList.remove('on');
         gmedia.innerHTML = '';   // kills any playing video
+        gateOpen = false;
       }
 
       gclose.addEventListener('click', closeGate);
@@ -2927,6 +2963,10 @@
 
       function refuse() {
         r.value = 0;
+        // one refusal per card. a single drag fires dozens of input
+        // events - without this she'd burn all three in half a second.
+        if (gateOpen) return;
+        gateOpen = true;
         r.classList.remove('refuse');
         void r.offsetWidth;              // restart the shiver
         r.classList.add('refuse');
