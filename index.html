@@ -329,7 +329,17 @@
 
     nav .links {
       display: flex;
-      gap: 22px
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px 16px;
+      max-width: 62vw;
+    }
+
+    @media(max-width:1080px) {
+      nav a {
+        font-size: 9.5px;
+        letter-spacing: .16em
+      }
     }
 
     nav a {
@@ -1490,6 +1500,234 @@
       color: var(--muted);
     }
 
+    /* ===================== SCOREBOARD ===================== */
+    #score {
+      background:
+        radial-gradient(700px 400px at 80% 20%, rgba(224, 30, 80, .12), transparent 70%),
+        var(--bg-2);
+      border-top: 1px solid var(--line);
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1px;
+      margin-top: 48px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .stat {
+      background: var(--bg-2);
+      padding: 34px 24px 30px;
+      position: relative;
+      overflow: hidden;
+      transition: background .4s;
+    }
+
+    .stat:hover {
+      background: #12101a
+    }
+
+    .stat::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0;
+      background: linear-gradient(90deg, var(--crimson), var(--violet));
+      transition: width 1.4s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .stat.run::after {
+      width: 100%
+    }
+
+    .stat .num {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(40px, 7vw, 68px);
+      line-height: .95;
+      color: var(--ink);
+      letter-spacing: -.01em;
+    }
+
+    .stat .num i {
+      font-style: normal;
+      color: var(--crimson);
+      font-size: .55em;
+      margin-left: 3px;
+    }
+
+    .stat .lbl {
+      margin-top: 12px;
+      font-size: 10.5px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .stat .note {
+      margin-top: 10px;
+      font-family: 'Caveat', cursive;
+      font-size: 18px;
+      color: var(--rose);
+    }
+
+    /* ===================== CERTIFICATE ===================== */
+    #award {
+      background:
+        radial-gradient(800px 600px at 50% 50%, rgba(123, 44, 191, .15), transparent 70%),
+        var(--bg);
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .cert {
+      max-width: 700px;
+      margin: 46px auto 0;
+      padding: clamp(30px, 5vw, 56px) clamp(22px, 4vw, 50px);
+      position: relative;
+      color: #2c2230;
+      background:
+        radial-gradient(circle at 50% 0%, #fffaf0, #eadfc4);
+      border: 1px solid rgba(0, 0, 0, .2);
+      box-shadow: 0 44px 100px rgba(0, 0, 0, .8), 0 0 70px rgba(224, 30, 80, .18);
+      transform: rotate(-.7deg);
+      transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .cert:hover {
+      transform: rotate(0) scale(1.015)
+    }
+
+    /* double gold-ish rule frame */
+    .cert::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 2px solid rgba(156, 15, 48, .5);
+      pointer-events: none;
+    }
+
+    .cert::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(156, 15, 48, .28);
+      pointer-events: none;
+    }
+
+    .cert .eyebrow {
+      font-size: 9.5px;
+      letter-spacing: .42em;
+      text-transform: uppercase;
+      color: #8a7360;
+    }
+
+    .cert h3 {
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(22px, 4.6vw, 42px);
+      line-height: 1.02;
+      margin: 14px 0 6px;
+      color: #9c0f30;
+    }
+
+    .cert .awarded {
+      font-size: 10px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: #8a7360;
+      margin-top: 22px;
+    }
+
+    .cert .name {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(52px, 12vw, 104px);
+      line-height: 1;
+      color: #2c2230;
+      margin: 4px 0 6px;
+    }
+
+    .cert .reason {
+      font-size: 11.5px;
+      line-height: 2.1;
+      color: #5c4d5e;
+      max-width: 440px;
+      margin: 16px auto 0;
+    }
+
+    .cert .sigrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin-top: 40px;
+      padding-top: 8px;
+    }
+
+    .cert .sig {
+      flex: 1;
+      text-align: center
+    }
+
+    .cert .sig .ink {
+      font-family: 'Caveat', cursive;
+      font-size: 27px;
+      color: #9c0f30;
+    }
+
+    .cert .sig .line {
+      height: 1px;
+      background: rgba(60, 40, 70, .35);
+      margin: 4px 0 8px;
+    }
+
+    .cert .sig .cap {
+      font-size: 8.5px;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: #8a7360;
+    }
+
+    .cert .seal {
+      width: 96px;
+      height: 96px;
+      flex: 0 0 96px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 34% 28%, #ff4d7d, #9c0f30 65%, #6d0722);
+      color: rgba(255, 255, 255, .92);
+      display: grid;
+      place-items: center;
+      align-content: center;
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      line-height: 1.15;
+      font-size: 10px;
+      letter-spacing: .1em;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .5);
+      transform: rotate(-9deg);
+    }
+
+    .cert .seal b {
+      font-size: 24px;
+      font-weight: 400;
+      display: block;
+    }
+
+    @media(max-width:560px) {
+      .cert .sigrow {
+        flex-direction: column;
+        align-items: center
+      }
+
+      .cert .sig {
+        width: 100%
+      }
+    }
+
     /* ===================== HOGWARTS LETTER ===================== */
     #owlpost {
       background:
@@ -1846,6 +2084,161 @@
       }
     }
 
+    /* ---- FULLSCREEN LETTER TAKEOVER ---- */
+    #fullletter {
+      position: fixed;
+      inset: 0;
+      z-index: 9992;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(1000px 700px at 50% 40%, rgba(123, 44, 191, .3), transparent 70%),
+        rgba(4, 3, 8, .96);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .6s ease, visibility .6s;
+      overflow: hidden;
+    }
+
+    #fullletter.on {
+      opacity: 1;
+      visibility: visible
+    }
+
+    .fl-sheet {
+      position: relative;
+      width: min(760px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: clamp(34px, 6vw, 70px) clamp(24px, 5vw, 62px);
+      text-align: center;
+      color: #241c26;
+      background:
+        repeating-linear-gradient(to bottom, transparent 0 33px, rgba(120, 90, 130, .12) 33px 34px),
+        linear-gradient(165deg, #fdf8ec, #ebdfc6);
+      box-shadow: 0 60px 130px rgba(0, 0, 0, .9), 0 0 90px rgba(224, 30, 80, .28);
+      border: 1px solid rgba(0, 0, 0, .18);
+      transform: translateY(60px) scale(.9) rotate(-2deg);
+      opacity: 0;
+      transition: transform 1s cubic-bezier(.2, .8, .25, 1) .18s, opacity .7s .18s;
+    }
+
+    #fullletter.on .fl-sheet {
+      transform: none;
+      opacity: 1
+    }
+
+    /* torn top edge so it reads as pulled out of the envelope */
+    .fl-sheet::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -1px;
+      height: 12px;
+      background: repeating-linear-gradient(135deg, #fdf8ec 0 9px, transparent 9px 18px);
+      filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, .12));
+    }
+
+    .fl-sheet .to {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(20px, 3vw, 27px);
+      color: #7a6a80;
+      text-align: left;
+    }
+
+    .fl-sheet .big {
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(34px, 8vw, 82px);
+      line-height: .95;
+      margin: 22px 0 8px;
+      color: #9c0f30;
+    }
+
+    .fl-sheet .big span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1.6px #9c0f30;
+    }
+
+    .fl-sheet .sub {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(19px, 2.6vw, 27px);
+      color: #4d3f52;
+      line-height: 1.55;
+      margin-top: 20px;
+    }
+
+    .fl-sheet .rule {
+      width: 90px;
+      height: 1px;
+      background: rgba(60, 40, 70, .3);
+      margin: 30px auto;
+    }
+
+    .fl-sheet .from {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(22px, 3vw, 30px);
+      color: #9c0f30;
+      text-align: right;
+    }
+
+    .fl-close {
+      position: absolute;
+      top: 20px;
+      right: 22px;
+      z-index: 3;
+      background: none;
+      border: 1px solid rgba(255, 255, 255, .25);
+      color: rgba(255, 255, 255, .65);
+      font-size: 9px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      cursor: none;
+      transition: border-color .3s, color .3s;
+    }
+
+    .fl-close:hover {
+      border-color: var(--crimson);
+      color: var(--rose)
+    }
+
+    /* kisses raining over the whole screen */
+    .fl-spray {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .fl-spray b {
+      position: absolute;
+      color: var(--rose);
+      animation: flrise linear forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes flrise {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(.4) rotate(0)
+      }
+
+      12% {
+        opacity: 1
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-108vh) scale(1.35) rotate(var(--rot))
+      }
+    }
+
     /* kisses + hearts pouring out, forever */
     .spray {
       position: absolute;
@@ -1995,6 +2388,8 @@
       <a href="#story">history</a>
       <a href="#letter">letter</a>
       <a href="#onesong">side b</a>
+      <a href="#score">scoreboard</a>
+      <a href="#award">award</a>
       <a href="#owlpost">owl post</a>
     </div>
   </nav>
@@ -2301,6 +2696,67 @@
     </div>
   </section>
 
+  <!-- ============ SCOREBOARD ============ -->
+  <section id="score">
+    <div class="wrap">
+      <div class="kicker reveal">lifetime statistics · unaudited</div>
+      <h2 class="huge reveal" style="font-size:clamp(30px,6vw,72px);margin-top:14px">
+        THE <span style="color:var(--crimson)">SCOREBOARD</span>
+      </h2>
+      <p class="mono-sm reveal" style="max-width:470px;margin-top:16px">
+        numbers don't lie. these ones might. edit them in the STATS list in the html.
+      </p>
+
+      <!-- numbers live in the STATS list at the top of the script -->
+      <div class="board" id="board"></div>
+    </div>
+  </section>
+
+  <!-- ============ CERTIFICATE ============ -->
+  <section id="award">
+    <div class="wrap">
+      <div class="kicker reveal">official · non-negotiable</div>
+      <h2 class="huge reveal" style="font-size:clamp(30px,6vw,72px);margin-top:14px">THE AWARD</h2>
+      <p class="mono-sm reveal" style="max-width:430px;margin:16px auto 0">
+        screenshot this. put it on your story. i'm not going to stop you.
+      </p>
+
+      <div class="cert reveal">
+        <div class="eyebrow">certificate of achievement</div>
+        <h3>WORLD'S BEST SISTER</h3>
+        <div class="eyebrow" style="letter-spacing:.2em">est. the day you were born · renewed annually without asking</div>
+
+        <div class="awarded">this is hereby awarded to</div>
+        <div class="name">Tita</div>
+
+        <p class="reason">
+          for winning every argument by pure stamina, for never returning a single hoodie,
+          for knowing something was wrong before I said a word, and for laughing every
+          single time even when you swore you wouldn't.
+        </p>
+
+        <div class="sigrow">
+          <div class="sig">
+            <div class="ink">Shubh</div>
+            <div class="line"></div>
+            <div class="cap">brother · sole authority</div>
+          </div>
+
+          <div class="seal">
+            <b>T</b>
+            <span>certified</span>
+          </div>
+
+          <div class="sig">
+            <div class="ink" id="certDate">02 August 2026</div>
+            <div class="line"></div>
+            <div class="cap">sister's day</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ HOGWARTS LETTER ============ -->
   <section id="owlpost">
     <div class="swarm" id="swarm"></div>
@@ -2365,6 +2821,25 @@
     </div>
   </section>
 
+  <!-- ============ FULLSCREEN LETTER ============ -->
+  <div id="fullletter">
+    <div class="fl-spray" id="flSpray"></div>
+    <button class="fl-close" id="flClose">close</button>
+    <div class="fl-sheet">
+      <div class="to">Tita,</div>
+      <div class="big">I LOVE YOU<br><span>TITA</span>SO MUCH</div>
+      <div class="sub">
+        and now you can't un-read it. it's on a website. it's permanent.<br>
+        be as angry as you want — this doesn't go away.
+      </div>
+      <div class="rule"></div>
+      <div class="sub" style="font-size:clamp(17px,2.2vw,22px)">
+        itna bhi kya gussa jara… hass kar dekhao.
+      </div>
+      <div class="from">— Shubh</div>
+    </div>
+  </div>
+
   <!-- ============ FOOTER ============ -->
   <footer>
     <div class="big reveal">HASS KAR DEKHAO</div>
@@ -2416,6 +2891,23 @@
         why: "I know all the words",
         link: "https://www.youtube.com/watch?v=90qE26nETds"
       }
+    ];
+
+    /* =========================================================
+       THE SCOREBOARD  <<<<<< EDIT THE NUMBERS HERE >>>>>>
+       ---------------------------------------------------------
+       n     = the number it counts up to
+       suf   = anything after it ("%", "+", "hrs")
+       lbl   = the label underneath
+       note  = the small handwritten jab
+       ========================================================= */
+    const STATS = [
+      { n: 100, suf: "%", lbl: "arguments won by her", note: "by stamina, not logic" },
+      { n: 14, suf: "", lbl: "hoodies never returned", note: "i've stopped counting" },
+      { n: 0, suf: "", lbl: "full days we've stayed angry", note: "record still stands" },
+      { n: 4000, suf: "+", lbl: "times i've said the line", note: "worked 4000 times" },
+      { n: 3, suf: " sec", lbl: "for her to know something's wrong", note: "mildly terrifying" },
+      { n: 100, suf: "%", lbl: "chance she'd fight anyone for me", note: "unverified but obvious" }
     ];
 
     /* =========================================================
@@ -2548,6 +3040,58 @@
     })();
 
     /* =========================================================
+       SCOREBOARD — numbers roll up when she scrolls to them
+       ========================================================= */
+    (function () {
+      const board = document.getElementById('board');
+      if (!board) return;
+
+      STATS.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'stat reveal';
+        el.innerHTML =
+          `<div class="num"><span>0</span><i>${s.suf}</i></div>
+           <div class="lbl">${s.lbl}</div>
+           <div class="note">${s.note}</div>`;
+        el.dataset.target = s.n;
+        board.appendChild(el);
+      });
+
+      function roll(el) {
+        const target = +el.dataset.target;
+        const out = el.querySelector('.num span');
+        const dur = 1500;
+        const t0 = performance.now();
+        (function step(now) {
+          const p = Math.min(1, (now - t0) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);          // ease-out
+          out.textContent = Math.round(target * eased).toLocaleString('en-IN');
+          if (p < 1) requestAnimationFrame(step);
+        })(t0);
+      }
+
+      const io = new IntersectionObserver(es => {
+        es.forEach(e => {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('run');
+          roll(e.target);
+          io.unobserve(e.target);
+        });
+      }, { threshold: .45 });
+
+      board.querySelectorAll('.stat').forEach(el => io.observe(el));
+    })();
+
+    /* keeps the certificate date honest */
+    (function () {
+      const d = document.getElementById('certDate');
+      if (!d) return;
+      const now = new Date();
+      d.textContent = now.toLocaleDateString('en-GB',
+        { day: '2-digit', month: 'long', year: 'numeric' });
+    })();
+
+    /* =========================================================
        OWL POST — flying letters + the envelope that never
        stops throwing kisses once it's open
        ========================================================= */
@@ -2592,6 +3136,46 @@
         sec.classList.add('owlpost-opened');                     // owl flies off
         for (let i = 0; i < 30; i++) setTimeout(kiss, i * 45);   // opening burst
         timer = setInterval(kiss, 190);                          // then forever
+        setTimeout(openFull, 900);                               // then it takes the screen
+      });
+
+      /* ---- the letter takes over the whole screen ---- */
+      const full = document.getElementById('fullletter');
+      const flSpray = document.getElementById('flSpray');
+      const flClose = document.getElementById('flClose');
+      let flTimer = null;
+
+      function flKiss() {
+        const b = document.createElement('b');
+        b.textContent = BITS[Math.floor(Math.random() * BITS.length)];
+        b.style.left = (Math.random() * 100) + 'vw';
+        b.style.top = (100 + Math.random() * 12) + 'vh';
+        b.style.fontSize = (14 + Math.random() * 30) + 'px';
+        b.style.setProperty('--rot', (Math.random() * 260 - 130) + 'deg');
+        b.style.animationDuration = (4.5 + Math.random() * 4) + 's';
+        flSpray.appendChild(b);
+        setTimeout(() => b.remove(), 9000);
+      }
+
+      function openFull() {
+        full.classList.add('on');
+        document.body.style.overflow = 'hidden';
+        for (let i = 0; i < 26; i++) setTimeout(flKiss, i * 90);
+        if (!flTimer) flTimer = setInterval(flKiss, 260);
+      }
+
+      function closeFull() {
+        full.classList.remove('on');
+        document.body.style.overflow = '';
+        clearInterval(flTimer);
+        flTimer = null;
+        setTimeout(() => { flSpray.innerHTML = ''; }, 700);
+      }
+
+      flClose.addEventListener('click', closeFull);
+      full.addEventListener('click', e => { if (e.target === full) closeFull(); });
+      addEventListener('keydown', e => {
+        if (e.key === 'Escape' && full.classList.contains('on')) closeFull();
       });
 
       // the owl only flies in once she scrolls here, then drops the letter
