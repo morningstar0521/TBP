@@ -816,9 +816,10 @@
       margin-bottom: 22px
     }
 
-    .gmedia img {
+    .gmedia img,
+    .gmedia video {
       width: 100%;
-      max-height: 300px;
+      max-height: 320px;
       object-fit: contain;
       display: block;
       border: 1px solid var(--line);
@@ -2911,18 +2912,19 @@
     ];
 
     /* =========================================================
-       GUSSA METER MEDIA  <<<<<< PASTE YOUR GIF LINKS HERE >>>>>>
+       GUSSA METER MEDIA
        ---------------------------------------------------------
        These show up when she tries to drag the meter backwards.
-       Use a DIRECT image link ending in .gif (right-click a
-       Tenor/Giphy gif -> "Copy image address").
-       You can also just drop files in the photos folder and
-       write "photos/matkar.gif".
+       Accepts: a file in the photos folder ("photos/x.jpg",
+       "photos/x.gif", "photos/x.mp4") or a direct web image link.
+       Filenames must have NO SPACES.
        ========================================================= */
     const GIFS = {
-      matKar: "",                    // 1st block  - "mat kar lala"
-      buraSong: "OVhLZkGEkBQ",       // 2nd block  - youtube id, "kya itna bura hu mai maa"
-      batman: ""                     // 3rd block  - batman lonely gif, then it unlocks
+      matKar: "photos/mat-kar-lala.jpg",   // 1st block - "mat kar lala"
+      buraSong: "OVhLZkGEkBQ",             // 2nd block - youtube id, "kya itna bura hu mai maa"
+      batman: "photos/batman-lonely.mp4"   // 3rd block - then it unlocks
+      // .mp4 / .webm play as silent looping video (a gif this long
+      // would be 8MB; the video is 1MB and looks identical)
     };
 
     /* =========================================================
@@ -3503,7 +3505,17 @@
 
       function slot(src, key) {
         if (!src) return missing(key);
-        return `<img src="${src}" alt="" onerror="this.parentNode.innerHTML=${JSON.stringify(missing(key)).replace(/"/g, '&quot;')}">`;
+        const fallback = JSON.stringify(missing(key)).replace(/"/g, '&quot;');
+        // video files loop silently and autoplay, same as a gif would
+        if (/\.(mp4|webm)$/i.test(src)) {
+          const stem = src.replace(/\.(mp4|webm)$/i, '');
+          return `<video autoplay loop muted playsinline
+                    onerror="this.parentNode.innerHTML=${fallback}">
+                    <source src="${stem}.webm" type="video/webm">
+                    <source src="${stem}.mp4" type="video/mp4">
+                  </video>`;
+        }
+        return `<img src="${src}" alt="" onerror="this.parentNode.innerHTML=${fallback}">`;
       }
 
       const BLOCKS = [
