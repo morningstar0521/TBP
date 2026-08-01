@@ -155,6 +155,148 @@
       -webkit-backdrop-filter: saturate(.35) brightness(.92);
     }
 
+    /* ============ PHOTO HOVER ZOOM + LIGHTBOX ============ */
+    /* carousel cards blow up on hover so she can actually see them */
+    .card3d .slot {
+      transition: transform .4s cubic-bezier(.2, .8, .2, 1), box-shadow .4s;
+      transform-origin: center;
+    }
+
+    .card3d:hover {
+      z-index: 40
+    }
+
+    .card3d:hover .slot {
+      transform: scale(1.55);
+      box-shadow: 0 40px 90px rgba(0, 0, 0, .9), 0 0 60px rgba(224, 30, 80, .45);
+      border-color: rgba(224, 30, 80, .8);
+    }
+
+    .card3d:hover::after {
+      opacity: 0
+    }
+
+    /* timeline photos */
+    .ev .slot {
+      transition: transform .45s cubic-bezier(.2, .8, .2, 1), box-shadow .45s, z-index 0s;
+      transform-origin: center;
+    }
+
+    .ev .slot:hover {
+      transform: scale(1.32);
+      position: relative;
+      z-index: 30;
+      box-shadow: 0 40px 90px rgba(0, 0, 0, .9), 0 0 50px rgba(224, 30, 80, .35);
+    }
+
+    /* polaroids */
+    .polaroid:hover {
+      z-index: 30
+    }
+
+    .polaroid:hover .slot img {
+      transform: scale(1.06)
+    }
+
+    .polaroid .slot img {
+      transition: transform .5s cubic-bezier(.2, .8, .2, 1)
+    }
+
+    /* every photo tells her it can be opened */
+    .slot img {
+      cursor: none
+    }
+
+    .slot::after {
+      content: "click to enlarge";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 4;
+      padding: 8px 6px;
+      font-size: 7.5px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .75);
+      background: linear-gradient(transparent, rgba(0, 0, 0, .8));
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+    }
+
+    .slot:hover::after {
+      opacity: 1
+    }
+
+    /* ---- lightbox ---- */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10006;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: rgba(4, 3, 8, .95);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .35s, visibility .35s;
+    }
+
+    #lightbox.on {
+      opacity: 1;
+      visibility: visible
+    }
+
+    #lightbox img {
+      max-width: 100%;
+      max-height: 86vh;
+      object-fit: contain;
+      display: block;
+      border: 1px solid rgba(255, 255, 255, .16);
+      box-shadow: 0 50px 120px rgba(0, 0, 0, .9), 0 0 90px rgba(224, 30, 80, .25);
+      transform: scale(.9);
+      transition: transform .45s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    #lightbox.on img {
+      transform: scale(1)
+    }
+
+    #lightbox .lb-close {
+      position: absolute;
+      top: 22px;
+      right: 24px;
+      background: none;
+      border: 1px solid rgba(255, 255, 255, .25);
+      color: rgba(255, 255, 255, .7);
+      font-size: 9px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      cursor: none;
+      transition: border-color .3s, color .3s;
+    }
+
+    #lightbox .lb-close:hover {
+      border-color: var(--crimson);
+      color: var(--rose)
+    }
+
+    #lightbox .lb-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 8.5px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .3);
+    }
+
     /* ===================== LOCK SCREEN ===================== */
     #lock {
       position: fixed;
@@ -252,15 +394,19 @@
       transition: background .3s, color .3s, box-shadow .3s, transform .25s;
     }
 
+    /* --yesScale grows every time the no button runs away */
     .lock-btn.yes {
       background: var(--crimson);
       box-shadow: 0 0 34px rgba(224, 30, 80, .5);
       position: relative;
       z-index: 4;
+      transform: scale(var(--yesScale, 1));
+      transition: transform .45s cubic-bezier(.3, 1.5, .5, 1),
+        box-shadow .45s, letter-spacing .45s;
     }
 
     .lock-btn.yes:hover {
-      transform: scale(1.09);
+      transform: scale(calc(var(--yesScale, 1) * 1.08));
       box-shadow: 0 0 60px rgba(224, 30, 80, .95);
     }
 
@@ -2671,6 +2817,13 @@
   <div id="cursor"></div>
   <div class="hearts" id="heartLayer"></div>
 
+  <!-- full-size photo viewer -->
+  <div id="lightbox">
+    <button class="lb-close" id="lbClose">close</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-hint">click anywhere or press esc to close</div>
+  </div>
+
   <!-- ============ NAV ============ -->
   <nav>
     <div class="brand">TITA<span>.</span>EXE</div>
@@ -3510,6 +3663,44 @@
     })();
 
     /* =========================================================
+       PHOTO LIGHTBOX — click any photo to see it full size
+       ========================================================= */
+    (function () {
+      const box = document.getElementById('lightbox');
+      const img = document.getElementById('lbImg');
+      const close = document.getElementById('lbClose');
+      if (!box) return;
+
+      function open(src, alt) {
+        img.src = src;
+        img.alt = alt || '';
+        box.classList.add('on');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function shut() {
+        box.classList.remove('on');
+        document.body.style.overflow = '';
+        setTimeout(() => { if (!box.classList.contains('on')) img.src = ''; }, 400);
+      }
+
+      // delegated, so it also covers the carousel cards built by JS
+      document.addEventListener('click', e => {
+        const im = e.target.closest && e.target.closest('.slot img');
+        if (!im || im.classList.contains('err') || !im.getAttribute('src')) return;
+        e.preventDefault();
+        e.stopPropagation();
+        open(im.getAttribute('src'), im.alt);
+      });
+
+      close.addEventListener('click', shut);
+      box.addEventListener('click', shut);
+      addEventListener('keydown', e => {
+        if (e.key === 'Escape' && box.classList.contains('on')) shut();
+      });
+    })();
+
+    /* =========================================================
        0.5 LOCK SCREEN — "do you love me?"
        ---------------------------------------------------------
        NO runs away every time she goes near it, shrinking as it
@@ -3560,6 +3751,11 @@
         tries++;
         const scale = Math.max(0.16, 1 - tries * 0.095);
 
+        // as no shrinks, yes swells to fill the space it left
+        const yesScale = Math.min(1.85, 1 + tries * 0.1);
+        yes.style.setProperty('--yesScale', yesScale.toFixed(3));
+        yes.style.boxShadow = `0 0 ${34 + tries * 9}px rgba(224,30,80,${Math.min(.95, .5 + tries * .06)})`;
+
         // final attempt: crawl behind the yes button and stay there
         if (tries >= MAX) {
           const y = yes.getBoundingClientRect();
@@ -3568,6 +3764,7 @@
           no.style.left = (y.left + y.width / 2) + 'px';
           no.style.top = (y.top + y.height / 2) + 'px';
           no.style.transform = 'translate(-50%,-50%) scale(.14)';
+          yes.style.setProperty('--yesScale', '1.85');
           sub.textContent = "the no button has resigned. it's behind the yes now. it lives there.";
           foot.textContent = "there was only ever one answer.";
           return;
@@ -3866,10 +4063,16 @@
         });
       });
 
+      // stop spinning while she's looking at one, or she can't click it
+      let hovering = false;
+      stage.addEventListener('pointerenter', () => hovering = true);
+      stage.addEventListener('pointerleave', () => hovering = false);
+
       (function spin() {
         requestAnimationFrame(spin);
         if (!dragging) {
-          vel += (0.16 - vel) * 0.03;   // ease back to idle drift
+          const idle = hovering ? 0 : 0.16;
+          vel += (idle - vel) * (hovering ? 0.09 : 0.03);
           angle += vel;
         }
         ring.style.transform = `translateZ(-${RADIUS}px) rotateY(${angle}deg)`;
