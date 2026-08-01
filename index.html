@@ -984,6 +984,317 @@
       }
     }
 
+    .track {
+      cursor: none;
+    }
+
+    .track .i {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .track .play {
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-left: 9px solid var(--crimson);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      transition: transform .3s, border-left-color .3s;
+    }
+
+    .track.open .play {
+      transform: rotate(90deg);
+      border-left-color: var(--warm);
+    }
+
+    .track.open {
+      background: rgba(224, 30, 80, .1);
+      padding-left: 18px;
+    }
+
+    .track.open .ti {
+      color: var(--rose);
+    }
+
+    .player {
+      grid-column: 1 / -1;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .5s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .track.open .player {
+      max-height: 460px;
+    }
+
+    .player .box {
+      margin: 18px 0 6px;
+      aspect-ratio: 16/9;
+      max-width: 640px;
+      border: 1px solid var(--line);
+      background: #000;
+      box-shadow: 0 26px 60px rgba(0, 0, 0, .7);
+    }
+
+    .player iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+    }
+
+    /* fallback shown when the page is opened straight from disk */
+    .player .ytlink {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+    }
+
+    .player .ytlink.locked {
+      cursor: none
+    }
+
+    .player .ytlink img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(.55) contrast(1.05) brightness(.62);
+      transition: filter .4s, transform .6s;
+    }
+
+    .player .ytlink:hover img {
+      filter: saturate(1) brightness(.8);
+      transform: scale(1.03);
+    }
+
+    .player .yt-ui {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+      text-align: center;
+      font-size: 9.5px;
+      line-height: 1.9;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .5);
+      background: radial-gradient(circle at center, rgba(224, 30, 80, .18), rgba(7, 7, 11, .82));
+    }
+
+    .player .yt-ui b {
+      font-family: 'Anton', sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+      letter-spacing: .16em;
+      color: var(--crimson);
+    }
+
+    .player .yt-ui u {
+      color: var(--rose);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(255, 77, 125, .5);
+    }
+
+    .player .nolink {
+      margin: 18px 0 6px;
+      padding: 22px;
+      border: 1px dashed rgba(224, 30, 80, .45);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .35);
+    }
+
+    /* ===================== ONE SONG (from me to you) ===================== */
+    #onesong {
+      background:
+        radial-gradient(900px 620px at 50% 40%, rgba(224, 30, 80, .16), transparent 70%),
+        var(--bg);
+      border-top: 1px solid var(--line);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #onesong .halo {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(78vw, 700px);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(224, 30, 80, .18);
+      pointer-events: none;
+      animation: pulse 5.5s ease-in-out infinite;
+    }
+
+    #onesong .halo:nth-of-type(2) {
+      width: min(58vw, 520px);
+      animation-delay: 1.6s;
+      border-color: rgba(160, 108, 213, .2);
+    }
+
+    #onesong .halo:nth-of-type(3) {
+      width: min(38vw, 350px);
+      animation-delay: 3.2s;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) scale(.94);
+        opacity: .35
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.06);
+        opacity: .9
+      }
+    }
+
+    #onesong .wrap {
+      position: relative;
+      z-index: 2
+    }
+
+    #onesong .head {
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(30px, 7vw, 78px);
+      line-height: .95;
+      margin-top: 14px;
+    }
+
+    #onesong .head em {
+      font-style: normal;
+      color: transparent;
+      -webkit-text-stroke: 1.4px var(--crimson);
+    }
+
+    .songframe {
+      max-width: 720px;
+      margin: 46px auto 0;
+      border: 1px solid var(--line);
+      background: linear-gradient(170deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .012));
+      padding: 16px;
+      box-shadow: 0 40px 90px rgba(0, 0, 0, .8);
+      position: relative;
+    }
+
+    .songframe::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      border: 1px solid rgba(224, 30, 80, .35);
+      transform: translate(6px, 6px);
+    }
+
+    .songframe .screen {
+      aspect-ratio: 16/9;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .songframe iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0
+    }
+
+    .songframe .cover {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: radial-gradient(circle at center, rgba(224, 30, 80, .2), rgba(7, 7, 11, .96));
+      transition: opacity .5s, visibility .5s;
+    }
+
+    .songframe .cover.gone {
+      opacity: 0;
+      visibility: hidden
+    }
+
+    .songframe .bigplay {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      border: 2px solid var(--crimson);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 44px rgba(224, 30, 80, .55);
+      animation: beat 1.8s ease-in-out infinite;
+    }
+
+    .songframe .bigplay i {
+      display: block;
+      width: 0;
+      height: 0;
+      margin-left: 5px;
+      border-left: 20px solid var(--crimson);
+      border-top: 13px solid transparent;
+      border-bottom: 13px solid transparent;
+    }
+
+    @keyframes beat {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.09)
+      }
+    }
+
+    .songframe .cover span {
+      font-size: 10px;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .songframe .plate {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 4px 4px;
+      gap: 14px;
+    }
+
+    .songframe .plate .t {
+      font-family: 'Anton', sans-serif;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: .04em;
+      text-align: left;
+    }
+
+    .songframe .plate .s {
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
     /* ===================== FOOTER ===================== */
     footer {
       padding: 90px clamp(20px, 6vw, 90px) 60px;
@@ -1088,6 +1399,7 @@
       <a href="#meter">gussa meter</a>
       <a href="#story">history</a>
       <a href="#letter">letter</a>
+      <a href="#onesong">side b</a>
     </div>
   </nav>
 
@@ -1337,51 +1649,45 @@
       <div class="kicker reveal">side a</div>
       <h2 class="huge reveal" style="font-size:clamp(30px,6vw,72px);margin-top:14px">THE MIXTAPE</h2>
 
-      <div class="tracks">
-        <div class="track reveal">
-          <div class="i">01</div>
-          <div>
-            <div class="ti">the one you scream in the car</div>
-            <div class="ar">volume: illegal</div>
+      <p class="mono-sm reveal" style="max-width:480px;margin-top:16px">
+        click any track. it plays right here. no leaving the page, no excuses.
+      </p>
+      <p class="mono-sm reveal" id="fileHint"
+        style="max-width:520px;margin-top:10px;color:var(--rose);display:none">
+        playback is locked because this page was opened straight from the file.
+        double-click <b>serve.command</b> in this folder and everything plays here.
+      </p>
+
+      <div class="tracks" id="tracks"><!-- built from the PLAYLIST list in the script below --></div>
+    </div>
+  </section>
+
+  <!-- ============ ONE SONG — FROM ME TO YOU ============ -->
+  <section id="onesong">
+    <div class="halo"></div>
+    <div class="halo"></div>
+    <div class="halo"></div>
+
+    <div class="wrap">
+      <div class="kicker reveal">side b · one track only</div>
+      <div class="head reveal">IF YOU ONLY<br><em>PLAY ONE</em><br>PLAY THIS</div>
+      <p class="mono-sm reveal" style="max-width:440px;margin:22px auto 0">
+        the other five are ours. this one is mine, and I'm giving it to you.
+        put headphones on. don't skip it halfway like you always do.
+      </p>
+
+      <div class="songframe reveal">
+        <div class="screen" id="songScreen" data-id="55_31qXTjpE">
+          <div class="cover" id="songCover">
+            <div class="bigplay"><i></i></div>
+            <span>press play</span>
           </div>
-          <div class="why">windows down, no shame</div>
         </div>
-        <div class="track reveal">
-          <div class="i">02</div>
-          <div>
-            <div class="ti">the sad one at 2am</div>
-            <div class="ar">emotional damage</div>
-          </div>
-          <div class="why">we don't discuss this one</div>
-        </div>
-        <div class="track reveal">
-          <div class="i">03</div>
-          <div>
-            <div class="ti">the childhood song</div>
-            <div class="ar">nostalgia core</div>
-          </div>
-          <div class="why">instant time machine</div>
-        </div>
-        <div class="track reveal">
-          <div class="i">04</div>
-          <div>
-            <div class="ti">the fight-then-makeup song</div>
-            <div class="ar">peace treaty</div>
-          </div>
-          <div class="why">works every time</div>
-        </div>
-        <div class="track reveal">
-          <div class="i">05</div>
-          <div>
-            <div class="ti">yours that I pretend to hate</div>
-            <div class="ar">secretly a banger</div>
-          </div>
-          <div class="why">I know all the words</div>
+        <div class="plate">
+          <div class="t">from shubh &nbsp;→&nbsp; tita</div>
+          <div class="s">side b · 01</div>
         </div>
       </div>
-      <p class="mono-sm reveal" style="margin-top:22px">
-        swap these for the real ones — they're in the HTML, marked "MIXTAPE".
-      </p>
     </div>
   </section>
 
@@ -1394,6 +1700,164 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
+    /* =========================================================
+       0. THE MIXTAPE  <<<<<< EDIT YOUR SONGS HERE >>>>>>
+       ---------------------------------------------------------
+       Paste a normal YouTube link in "link". ANY of these work:
+         https://www.youtube.com/watch?v=dQw4w9WgXcQ
+         https://youtu.be/dQw4w9WgXcQ
+         https://www.youtube.com/shorts/dQw4w9WgXcQ
+         https://music.youtube.com/watch?v=dQw4w9WgXcQ
+       Leave link as "" and the track still shows, just won't play.
+       Add or delete rows freely - the list renders itself.
+       ========================================================= */
+    const PLAYLIST = [
+      {
+        title: "the one you scream in the car",
+        artist: "volume: illegal",
+        why: "windows down, no shame",
+        link: "https://www.youtube.com/watch?v=SpSLQahAzBQ"
+      },
+      {
+        title: "the sad one at 2am",
+        artist: "emotional damage",
+        why: "we don't discuss this one",
+        link: "https://www.youtube.com/watch?v=FOkVXadnO88"
+      },
+      {
+        title: "the childhood song",
+        artist: "nostalgia core",
+        why: "instant time machine",
+        link: "https://www.youtube.com/watch?v=WUiI5aQcTow"
+      },
+      {
+        title: "the fight-then-makeup song",
+        artist: "peace treaty",
+        why: "works every time",
+        link: "https://www.youtube.com/watch?v=kd5KqlmcHNo"
+      },
+      {
+        title: "yours that I pretend to hate",
+        artist: "secretly a banger",
+        why: "I know all the words",
+        link: "https://www.youtube.com/watch?v=90qE26nETds"
+      }
+    ];
+
+    /* =========================================================
+       YOUTUBE PLAYER HELPER
+       ---------------------------------------------------------
+       YouTube refuses to embed when the page is opened straight
+       off the disk (file://) - that's the "Error 153" screen.
+       So: if we're on file://, show the real thumbnail and open
+       the song on YouTube in a new tab instead. If the page is
+       served over http/https (a local server, or once it's
+       hosted), everything plays inline like normal.
+       ========================================================= */
+    const IS_FILE = location.protocol === 'file:';
+    if (IS_FILE) {
+      addEventListener('DOMContentLoaded', () => {
+        const h = document.getElementById('fileHint');
+        if (h) h.style.display = 'block';
+      });
+    }
+
+    function mountVideo(box, id, title) {
+      if (!box || !id) return;
+      if (!IS_FILE) {
+        box.innerHTML =
+          `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0"
+             title="${title}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
+             allowfullscreen loading="lazy"></iframe>`;
+        return;
+      }
+      // file:// - can't embed. show a locked plate, never send her off-site.
+      box.innerHTML =
+        `<div class="ytlink locked">
+           <img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt="${title}"
+                onerror="this.style.display='none'">
+           <span class="yt-ui">
+             <b>playback locked</b>
+             open this site through <u>serve.command</u> to play songs here
+           </span>
+         </div>`;
+    }
+
+    /* ---- renders the list + inline YouTube player ---- */
+    (function () {
+      const host = document.getElementById('tracks');
+      if (!host) return;
+
+      // pulls the video id out of any youtube url shape
+      function ytid(url) {
+        if (!url) return '';
+        const m = String(url).match(
+          /(?:youtu\.be\/|v=|\/shorts\/|\/embed\/|\/live\/)([A-Za-z0-9_-]{11})/
+        );
+        return m ? m[1] : (/^[A-Za-z0-9_-]{11}$/.test(url.trim()) ? url.trim() : '');
+      }
+
+      PLAYLIST.forEach((t, i) => {
+        const id = ytid(t.link);
+        const row = document.createElement('div');
+        row.className = 'track reveal';
+        row.innerHTML = `
+          <div class="i"><span class="play"></span>${String(i + 1).padStart(2, '0')}</div>
+          <div>
+            <div class="ti">${t.title}</div>
+            <div class="ar">${t.artist}</div>
+          </div>
+          <div class="why">${t.why || ''}</div>
+          <div class="player">${
+            id
+              ? `<div class="box" data-id="${id}"></div>`
+              : `<div class="nolink">no link yet — paste a youtube link into PLAYLIST in the html</div>`
+          }</div>`;
+
+        row.addEventListener('click', () => {
+          const wasOpen = row.classList.contains('open');
+          // close everything (also kills any playing audio)
+          host.querySelectorAll('.track.open').forEach(r => {
+            r.classList.remove('open');
+            const b = r.querySelector('.box');
+            if (b) b.innerHTML = '';
+          });
+          if (wasOpen) return;
+          row.classList.add('open');
+          const box = row.querySelector('.box');
+          if (box) mountVideo(box, box.dataset.id, t.title);
+        });
+
+        host.appendChild(row);
+      });
+    })();
+
+    /* ---- the one dedicated song (side b) ---- */
+    (function () {
+      const screen = document.getElementById('songScreen');
+      const cover = document.getElementById('songCover');
+      if (!screen || !cover) return;
+      const id = screen.dataset.id;
+      cover.addEventListener('click', () => {
+        if (IS_FILE) return;              // stays on-site; never opens youtube
+        cover.classList.add('gone');
+        const f = document.createElement('iframe');
+        f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+        f.title = 'from shubh to tita';
+        f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture';
+        f.allowFullscreen = true;
+        screen.appendChild(f);
+      });
+      if (IS_FILE) {
+        screen.style.backgroundImage = `url(https://i.ytimg.com/vi/${id}/maxresdefault.jpg)`;
+        screen.style.backgroundSize = 'cover';
+        screen.style.backgroundPosition = 'center';
+        cover.classList.add('locked');
+        cover.querySelector('span').innerHTML =
+          'playback locked · open through serve.command';
+      }
+    })();
+
     /* =========================================================
        1. PRELOADER
        ========================================================= */
